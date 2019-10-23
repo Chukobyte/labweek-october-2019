@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
 
     public bool playSessionActive = false;
     public float runTime = 0.0f;
+    public Text timerText;    
+    public float fastestTime = 0.0f;
+    public Text fastestTimeText;
 
     // Start is called before the first frame update
     void Start()
@@ -28,17 +32,12 @@ public class PlayerMovement : MonoBehaviour
         if(playSessionActive)
         {
             runTime += Time.deltaTime;
-            Debug.Log("run time = " + runTime);
+            UpdateTimeText();
         }
         // Restart
         if (Input.GetKeyDown("r"))
         {
-            rigidbody.Sleep();
-            transform.rotation = new Quaternion(0, 0, 0, 0);
-            transform.position = startPosition;
-            obstacleSpawner = ground.GetComponent<ObstacleSpawner>();
-            obstacleSpawner.ResetSpawner();
-            playSessionActive = false;
+            RestartGame();
         }
 
         if (Input.GetKeyDown("space") && onGround)
@@ -49,6 +48,12 @@ public class PlayerMovement : MonoBehaviour
 
         rigidbody.AddForce(0, 0, forwardForce * Time.deltaTime);
         rigidbody.AddForce(GetInputVelocity());
+
+        //Restart if player fell off
+        if(transform.position.y <= -30.0f)
+        {
+            RestartGame();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -62,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         else if (collision.collider.name.Equals("Finish Line")) {
+            fastestTime = runTime;
+            UpdateFastestTimeText();
             playSessionActive = false;
         }
         Debug.Log(collision.collider.name);
@@ -88,5 +95,27 @@ public class PlayerMovement : MonoBehaviour
         //    movementVelocity += new Vector3(0, 0, accelForce * Time.deltaTime);
         //}
         return movementVelocity;
+    }
+
+    private void UpdateTimeText()
+    {
+        timerText.text = "Time: " + System.Math.Round(runTime, 2).ToString();
+    }
+
+    private void UpdateFastestTimeText()
+    {
+        fastestTimeText.text = "Record: " + System.Math.Round(fastestTime, 2).ToString();
+    }
+
+    private void RestartGame()
+    {
+        rigidbody.Sleep();
+        transform.rotation = new Quaternion(0, 0, 0, 0);
+        transform.position = startPosition;
+        obstacleSpawner = ground.GetComponent<ObstacleSpawner>();
+        obstacleSpawner.ResetSpawner();
+        playSessionActive = false;
+        runTime = 0.0f;
+        UpdateTimeText();
     }
 }
