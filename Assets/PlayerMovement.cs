@@ -12,6 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public float accelForce = 200f;
     public float jumpForce = 0.01f;
 
+    public bool playSessionActive = false;
+    public float runTime = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +25,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(playSessionActive)
+        {
+            runTime += Time.deltaTime;
+            Debug.Log("run time = " + runTime);
+        }
         // Restart
         if (Input.GetKeyDown("r"))
         {
@@ -30,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = startPosition;
             obstacleSpawner = ground.GetComponent<ObstacleSpawner>();
             obstacleSpawner.ResetSpawner();
+            playSessionActive = false;
         }
 
         if (Input.GetKeyDown("space") && onGround)
@@ -47,6 +56,13 @@ public class PlayerMovement : MonoBehaviour
         if (collision.collider.name.Equals("Ground"))
         {
             onGround = true;
+            if (!playSessionActive)
+            {
+                playSessionActive = true;
+            }
+        }
+        else if (collision.collider.name.Equals("Finish Line")) {
+            playSessionActive = false;
         }
         Debug.Log(collision.collider.name);
     }
@@ -63,14 +79,14 @@ public class PlayerMovement : MonoBehaviour
         {
             movementVelocity += new Vector3(-sidewaysForce * Time.deltaTime, 0, 0);
         }
-        if (Input.GetKey("w"))
-        {
-            movementVelocity += new Vector3(0, 0, -accelForce * Time.deltaTime);
-        }
-        if (Input.GetKey("s"))
-        {
-            movementVelocity += new Vector3(0, 0, accelForce * Time.deltaTime);
-        }
+        //if (Input.GetKey("w"))
+        //{
+        //    movementVelocity += new Vector3(0, 0, -accelForce * Time.deltaTime);
+        //}
+        //if (Input.GetKey("s"))
+        //{
+        //    movementVelocity += new Vector3(0, 0, accelForce * Time.deltaTime);
+        //}
         return movementVelocity;
     }
 }
