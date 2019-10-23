@@ -1,3 +1,3 @@
-#### Labweek Project October 2019
+## Labweek Project October 2019
 
-## Unity Game
+A simple unity game for lab week.
