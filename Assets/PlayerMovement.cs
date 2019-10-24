@@ -35,26 +35,30 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(playSessionActive)
+        if (Input.GetKeyDown("escape"))
+        {
+            Application.Quit();
+        }
+
+        if (playSessionActive)
         {
             runTime += Time.deltaTime;
             UpdateTimeText();
-            zMovementCounter = Mathf.Abs(transform.position.z - previousZPosition) * 2;
+            zMovementCounter = Mathf.Abs(transform.position.z - previousZPosition);
             previousZPosition = transform.position.z;
             //Debug.Log("zMovementCounter = " + zMovementCounter);
             //Debug.Log("player_z_distance_spawn_min = " + player_z_distance_spawn_min);
             if (zMovementCounter >= player_z_distance_spawn_min)
             {
-                Debug.Log("TEST");
                 zMovementCounter = 0.0f;
                 obstacleSpawner.spawnObstacle = true;
             }
         }
         // Restart
-        if (Input.GetKeyDown("r"))
-        {
-            RestartGame();
-        }
+        //if (Input.GetKeyDown("r"))
+        //{
+        //    RestartGame();
+        //}
 
         if (Input.GetKeyDown("space") && onGround)
         {
