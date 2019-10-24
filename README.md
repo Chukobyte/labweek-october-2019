@@ -4,7 +4,12 @@ A simple unity game for lab week.
 
 ### Instructions
 
-* Move Left - 'A'
-* Move Right - 'D'
-* Jump - 'SPACE'
-* Exit Game - 'ESC'
+#### Objective
+
+Make it to the finish line as fast as you can!
+
+#### Keyboard
+* Move Left - `A`
+* Move Right - `D`
+* Jump - `SPACE`
+* Exit Game - `ESC`
