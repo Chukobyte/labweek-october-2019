@@ -8,22 +8,27 @@ public class ObstacleSpawner : MonoBehaviour
 	public const int X_MIN_LIMIT = -10;
 	public const int X_MAX_LIMIT = 10;
 	public const int Y_SPAWN_POSITION = -2;
+	public float player_z_distance_spawn_min = 0.1f;
 	public GameObject obstaclePrefab;
 	public ArrayList obstacleList = new ArrayList();
 	private float[] randXPositions = new float[] {-4.0f, -3.0f, -2.0f, -1.0f, 0.0f, 1.0f, 2.0f, 3.0f, 4.0f};
+	public GameObject playerObject;
+	public PlayerMovement playerMovement;
 	public Transform player;
 	public float timeLeft = MAX_TIME;
+	public bool spawnObstacle = false;
     // Start is called before the first frame update
     void Start()
     {
-
-    }
+		playerMovement = playerObject.GetComponent<PlayerMovement>();
+	}
 
     // Update is called once per frame
     void FixedUpdate()
     {
 		timeLeft -= Time.deltaTime;
-        if (timeLeft <= 0 && player.position.z + 60 <= 1000)
+		//Debug.Log("playerMovement.zMovementCounter = " + playerMovement.zMovementCounter);
+		if (timeLeft <= 0 && player.position.z + 60 <= 1000 && spawnObstacle)
 		{
 			//spawn obstacle
 			int obstacleCount = Random.Range(2, 4);
@@ -35,6 +40,7 @@ public class ObstacleSpawner : MonoBehaviour
 				obstacleList.Add(obstacleInstance);
 			}
 			timeLeft = MAX_TIME;
+			spawnObstacle = false;
 		}
     }
 
